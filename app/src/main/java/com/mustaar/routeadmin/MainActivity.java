@@ -35,18 +35,18 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getList();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         refreshButton=(Button)findViewById(R.id.refreshbtn);
         listView=(ListView)findViewById(R.id.lv);
-
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getList();
             }
         });
+        getList();
     }
 
     void getList(){
@@ -54,12 +54,14 @@ public class MainActivity extends AppCompatActivity {
         con = connectionClass(ConnectionClass.ip,ConnectionClass.port, ConnectionClass.username, ConnectionClass.password, ConnectionClass.db);
         if(con!=null){
             String query=
-                    "Select PhoneNumber, Latitude, Longitude \n" +
-                            "From [Log] As a\n" +
-                            "Where [TimeStamp] = (\n" +
+                    "  Select PhoneNumber, Latitude, Longitude\n" +
+                            "  From [Log] As a\n" +
+                            "  Where [TimeStamp] = \n" +
+                            "\t\t\t\t( \n" +
                             "\t\t\t\t\t\tSelect Max([TimeStamp])\n" +
                             "\t\t\t\t\t\tFrom [Log] As b\n" +
                             "\t\t\t\t\t\tWhere a.PhoneNumber = b.PhoneNumber\n" +
+                            "\t\t\t\t\t\tAnd [DateStamp] = (Select Max([DateStamp]) From [Log] As c Where a.PhoneNumber = c.PhoneNumber )\n" +
                             "\t\t\t\t\t)";
             try {
                 Statement statement=con.createStatement();

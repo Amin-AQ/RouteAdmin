@@ -9,8 +9,10 @@
     <TextView
         android:id="@+id/phonenum"
         android:text=" "
+        android:textAlignment="center"
+        android:textColor="@color/purple_200"
         android:padding="5sp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp" />
 
